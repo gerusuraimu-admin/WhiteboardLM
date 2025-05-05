@@ -1,2 +1,10 @@
+python-dotenv
+discord
+slack_sdk
+slack_bolt
+pydantic
 fastapi
 uvicorn[standard]
+google
+google-cloud-firestore
+firebase-admin
