@@ -3,6 +3,7 @@ FROM python:3.9-slim
 WORKDIR /app
 
 COPY ./requirements.txt /app/requirements.txt
+COPY ./whiteboardlm /app/whiteboardlm
 COPY ./main.py /app/main.py
 
 RUN pip install --no-cache-dir --upgrade pip && \
