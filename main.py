@@ -1,14 +1,14 @@
 from itertools import chain
 from multiprocessing import Process
 from contextlib import asynccontextmanager
-import time
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from google.cloud import firestore
 
-from whiteboardlm import get_logger, get_token, slack_start, discord_start, UIDPayload, EmbedRequest
+from whiteboardlm import get_logger, get_token, slack_start, discord_start, get_file_metadata
+from whiteboardlm import UIDPayload, EmbedRequest
 
 logger = get_logger(__name__)
 
@@ -127,6 +127,8 @@ def discord_stop(data: UIDPayload):
 @server.post('/embed')
 async def embed(data: EmbedRequest):
     logger.info(f'Embed Request : {data.path}/{data.uid}')
+    metadata = get_file_metadata(db, data)
+    logger.info(f'===== Metadata =====\n{metadata}')
     return JSONResponse(
         status_code=200,
         content={"message": "Embed successfully"}
