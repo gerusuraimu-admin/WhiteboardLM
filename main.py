@@ -1,6 +1,7 @@
 from itertools import chain
 from multiprocessing import Process
 from contextlib import asynccontextmanager
+import time
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
@@ -16,6 +17,18 @@ discord_process = dict()
 db = firestore.Client()
 
 
+def terminate_process(process, timeout=3):
+    if process.is_alive():
+        process.terminate()
+        process.join(timeout)
+        if process.is_alive():
+            logger.warning("Process did not terminate within timeout, killing it")
+            process.kill()
+            process.join(timeout)
+            if process.is_alive():
+                logger.error("Failed to kill process")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global slack_process, discord_process
@@ -24,7 +37,7 @@ async def lifespan(app: FastAPI):
     yield
 
     for v in chain(slack_process.values(), discord_process.values()):
-        v.terminate()
+        terminate_process(v)
 
     logger.info('Server Stop')
 
@@ -65,7 +78,7 @@ def slack_stop(data: UIDPayload):
 
     if data.uid not in slack_process:
         raise HTTPException(status_code=400)
-    slack_process[data.uid].terminate()
+    terminate_process(slack_process[data.uid])
     del slack_process[data.uid]
 
     logger.info(f'Slack Bot Stop : {data.uid}')
@@ -102,7 +115,7 @@ def discord_stop(data: UIDPayload):
 
     if data.uid not in discord_process:
         raise HTTPException(status_code=400)
-    discord_process[data.uid].terminate()
+    terminate_process(discord_process[data.uid])
     del discord_process[data.uid]
 
     logger.info(f'Discord Bot Stop : {data.uid}')
