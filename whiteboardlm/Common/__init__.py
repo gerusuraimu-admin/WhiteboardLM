@@ -4,4 +4,6 @@ from .Respond import respond_test
 from .GetToken import get_token
 from .Payload import UIDPayload
 from .Payload import EmbedRequest
+from .ReadFile import detect_file_type
+from .ReadFile import read_file_from_gcs
 from .GetFileMetadata import get_file_metadata
