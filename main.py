@@ -128,7 +128,7 @@ def discord_stop(data: UIDPayload):
 async def embed(data: EmbedRequest):
     logger.info(f'Embed Request : {data.path}/{data.uid}')
     metadata = get_file_metadata(db, data)
-    logger.info(f'===== Metadata =====\n{metadata}')
+    logger.info(f'===== Metadata =====\n{str(metadata)}')
     return JSONResponse(
         status_code=200,
         content={"message": "Embed successfully"}

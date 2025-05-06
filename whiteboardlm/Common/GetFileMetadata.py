@@ -15,7 +15,7 @@ class FileMetadata:
     id: Optional[str] = None
 
     def __str__(self) -> str:
-        return ''.join(f'{k.ljust(11)} : {v}' for k, v in vars(self).items())
+        return '\n'.join(f'{k.ljust(11)} : {v}' for k, v in vars(self).items())
 
 
 def get_file_metadata(db, data):
