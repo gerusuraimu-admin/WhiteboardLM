@@ -20,13 +20,11 @@ db = firestore.Client()
 def terminate_process(process, timeout=3):
     if process.is_alive():
         process.terminate()
+        process.kill()
         process.join(timeout)
         if process.is_alive():
-            logger.warning("Process did not terminate within timeout, killing it")
-            process.kill()
-            process.join(timeout)
-            if process.is_alive():
-                logger.error("Failed to kill process")
+            logger.error("Failed to kill process")
+            raise HTTPException(status_code=500, detail="Failed to kill process")
 
 
 @asynccontextmanager
