@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from google.cloud import firestore
 
-from whiteboardlm import get_logger, get_token, slack_start, discord_start, UIDPayload
+from whiteboardlm import get_logger, get_token, slack_start, discord_start, UIDPayload, EmbedRequest
 
 logger = get_logger(__name__)
 
@@ -121,4 +121,13 @@ def discord_stop(data: UIDPayload):
     return JSONResponse(
         status_code=200,
         content={"message": "Discord bot stopped successfully"}
+    )
+
+
+@server.post('/embed')
+async def embed(data: EmbedRequest):
+    logger.info(f'Embed Request : {data.path}/{data.uid}')
+    return JSONResponse(
+        status_code=200,
+        content={"message": "Embed successfully"}
     )
