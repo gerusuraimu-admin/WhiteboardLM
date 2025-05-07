@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from google.cloud import firestore
 
 from whiteboardlm import UIDPayload, EmbedRequest
+from whiteboardlm import read_file_from_gcs, detect_file_type
 from whiteboardlm import get_logger, get_token, slack_start, discord_start, get_file_metadata
 
 logger = get_logger(__name__)
@@ -129,7 +130,10 @@ async def embed(data: EmbedRequest):
     try:
         logger.info(f'Embed Request : {data.path}/{data.uid}')
         metadata = get_file_metadata(db, data)
+        file_data = read_file_from_gcs(data.path, 'raggerweb-458706')
+        file_type = detect_file_type(data.path)
         logger.info(f'===== Metadata =====\n{metadata}')
+        logger.info(f'filetype: \n{file_type}')
         return JSONResponse(
             status_code=200,
             content={"message": "Embed successfully"}
