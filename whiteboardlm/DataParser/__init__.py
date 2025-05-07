@@ -1,2 +1,2 @@
-from DocType import DocType
-from TxtParser import txt2vec
+from .DocType import DocType
+from .TxtParser import txt2vec
