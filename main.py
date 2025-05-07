@@ -127,16 +127,19 @@ def discord_stop(data: UIDPayload):
 
 @server.post('/embed')
 async def embed(data: EmbedRequest):
+    max_length = 4096
     try:
         logger.info(f'Embed Request : {data.path}/{data.uid}')
         metadata = get_file_metadata(db, data)
         file_data = read_file_from_gcs(data.path, 'raggerweb-458706.firebasestorage.app')
         file_type = detect_file_type(data.path)
-        logger.info(f'===== Metadata =====\n{metadata}')
-        logger.info(f'filetype: \n{file_type}')
+
+        vector = file_type.handler(file_data, max_length)
+        logger.info(f'Generated vector: {vector[:100]}')
+
         return JSONResponse(
             status_code=200,
-            content={"message": "Embed successfully"}
+            content={"message": "Embed successfully", "vector_preview": vector[:100]}
         )
     except Exception as e:
         logger.error(f"Embed failed: {str(e)}")

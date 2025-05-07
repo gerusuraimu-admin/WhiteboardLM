@@ -1,6 +1,7 @@
 from google.cloud import storage
 from fastapi import HTTPException
 import mimetypes
+from whiteboardlm import DocType
 
 
 def read_file_from_gcs(path: str, bucket_name: str) -> bytes:
@@ -17,8 +18,8 @@ def read_file_from_gcs(path: str, bucket_name: str) -> bytes:
         raise HTTPException(status_code=500, detail=f"GCSファイル読み込み失敗: {e}")
 
 
-def detect_file_type(path: str) -> str:
+def detect_file_type(path: str) -> DocType:
     mime_type, _ = mimetypes.guess_type(path)
     if mime_type is None:
         raise HTTPException(status_code=400, detail="ファイルタイプを特定できません")
-    return mime_type
+    return DocType(mime_type)
