@@ -1,5 +1,5 @@
 from enum import Enum
-from whiteboardlm import txt2vec
+from whiteboardlm.DataParser.TxtParser import txt2vec
 
 
 class DocType(Enum):

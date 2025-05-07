@@ -1,7 +1,7 @@
 from google.cloud import storage
 from fastapi import HTTPException
 import mimetypes
-from whiteboardlm import DocType
+from whiteboardlm.DataParser.DocType import DocType
 
 
 def read_file_from_gcs(path: str, bucket_name: str) -> bytes:
