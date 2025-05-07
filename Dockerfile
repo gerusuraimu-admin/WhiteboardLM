@@ -9,6 +9,7 @@ COPY ./main.py /app/main.py
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r /app/requirements.txt \
 
+ENV PORT 8080
 ENV HOSTNAME "0.0.0.0"
 
 CMD ["uvicorn", "main:server", "--host", "0.0.0.0", "--port", "8080"]
