@@ -22,4 +22,4 @@ def detect_file_type(path: str) -> DocType:
     mime_type, _ = mimetypes.guess_type(path)
     if mime_type is None:
         raise HTTPException(status_code=400, detail="ファイルタイプを特定できません")
-    return DocType(mime_type)
+    return DocType.from_mime(mime_type)
