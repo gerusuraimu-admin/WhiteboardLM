@@ -130,7 +130,7 @@ async def embed(data: EmbedRequest):
     try:
         logger.info(f'Embed Request : {data.path}/{data.uid}')
         metadata = get_file_metadata(db, data)
-        file_data = read_file_from_gcs(data.path, 'raggerweb-458706')
+        file_data = read_file_from_gcs(data.path, 'raggerweb-458706.firebasestorage.app')
         file_type = detect_file_type(data.path)
         logger.info(f'===== Metadata =====\n{metadata}')
         logger.info(f'filetype: \n{file_type}')
