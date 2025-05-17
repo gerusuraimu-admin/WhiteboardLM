@@ -7,9 +7,8 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from google.cloud import firestore
 
-from whiteboardlm import UIDPayload, EmbedRequest
-from whiteboardlm import read_file_from_gcs, detect_file_type
-from whiteboardlm import get_logger, get_token, slack_start, discord_start, get_file_metadata
+from whiteboardlm import UIDPayload
+from whiteboardlm import get_logger, get_token, slack_start, discord_start
 
 logger = get_logger(__name__)
 
@@ -125,25 +124,10 @@ def discord_stop(data: UIDPayload):
     )
 
 
-@server.post('/embed')
-async def embed(data: EmbedRequest):
-    max_length = 4096
-    try:
-        logger.info(f'Embed Request : {data.path}/{data.uid}')
-        metadata = get_file_metadata(db, data)
-        file_data = read_file_from_gcs(data.path, 'raggerweb-458706.firebasestorage.app')
-        file_type = detect_file_type(data.path)
-
-        vector = file_type.handler(file_data, max_length)
-        logger.info(f'Generated vector: {vector[:100]}')
-
-        return JSONResponse(
-            status_code=200,
-            content={"message": "Embed successfully", "vector_preview": vector[:100]}
-        )
-    except Exception as e:
-        logger.error(f"Embed failed: {str(e)}")
-        return JSONResponse(
-            status_code=500,
-            content={"message": f"Embed failed: {str(e)}"}
-        )
+@server.post('/get_token')
+async def get_token(data: UIDPayload):
+    slack_token, app_token = get_token(db, data.uid, 'tokens_discord')
+    discord_token = get_token(db, data.uid, 'tokens_discord')
+    print(slack_token)
+    print(app_token)
+    print(discord_token)
