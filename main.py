@@ -126,6 +126,7 @@ def discord_stop(data: UIDPayload):
 
 @server.post('/get_token')
 def present_token(data: UIDPayload):
+    print(data)
     slack_token, app_token = get_token(db, data.uid, 'tokens_slack')
     discord_token = get_token(db, data.uid, 'tokens_discord')
     print(slack_token)
