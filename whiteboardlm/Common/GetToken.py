@@ -1,11 +1,8 @@
-from fastapi import HTTPException
-
-
 def get_token(db, uid, token_type):
     doc_ref = db.collection(token_type).document(uid)
     doc = doc_ref.get()
     if not doc.exists:
-        raise HTTPException(status_code=404)
+        return None
 
     token_data = doc.to_dict()
 

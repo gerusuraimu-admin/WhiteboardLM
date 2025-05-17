@@ -126,9 +126,19 @@ def discord_stop(data: UIDPayload):
 
 @server.post('/get_token')
 def present_token(data: UIDPayload):
-    print(data)
-    slack_token, app_token = get_token(db, data.uid, 'tokens_slack')
+    slacks = None
+    discords = None
+    slack_tokens = get_token(db, data.uid, 'tokens_slack')
+    if slack_tokens is not None:
+        slacks = {
+            'slack': slack_tokens[0][:7] + '*' * (len(slack_tokens[0]) - 7),
+            'app': slack_tokens[1][:7] + '*' * (len(slack_tokens[1]) - 7)
+        }
     discord_token = get_token(db, data.uid, 'tokens_discord')
-    print(slack_token)
-    print(app_token)
-    print(discord_token)
+    if discord_token is not None:
+        discords = discord_token[:7] + '*' * (len(discord_token) - 7)
+
+    return JSONResponse(
+        status_code=200,
+        content={'message': 'success', 'slack': slacks, 'discords': discords}
+    )
