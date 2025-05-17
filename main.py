@@ -140,5 +140,5 @@ def present_token(data: UIDPayload):
 
     return JSONResponse(
         status_code=200,
-        content={'message': 'success', 'slack': slacks, 'discords': discords}
+        content={'message': 'success', 'slacks': slacks, 'discords': discords}
     )
