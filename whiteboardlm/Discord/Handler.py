@@ -19,7 +19,7 @@ def discord_start(discord_token: str, uid: str):
         obj = DiscordEventObject(message)
 
         if to_bot(obj):
-            result = respond(obj.message, uid)  # クロージャで uid を利用
+            result = respond(obj.message, uid)
             await obj.channel.send(result)
 
     client.run(discord_token)
