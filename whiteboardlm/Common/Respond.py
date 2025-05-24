@@ -1,3 +1,4 @@
+import os
 import math
 from itertools import chain
 from google.cloud import storage, firestore
@@ -9,7 +10,7 @@ db = firestore.Client()
 
 def respond(message: str, uid: str) -> str:
     task = 'RETRIEVAL_QUERY'
-    model = TextEmbeddingModel.from_pretrained('text-multilingual-embedding-002')
+    model = TextEmbeddingModel.from_pretrained('text-embedding-005')
 
     inputs = [TextEmbeddingInput(message, task)]
     vector = [embed.values for embed in model.get_embeddings(inputs)]
@@ -30,7 +31,7 @@ def respond(message: str, uid: str) -> str:
             best_doc = data
 
     if best_doc:
-        doc = read_file_from_gcs(best_doc.get('path'), 'whiteboardlm-v1.firebasestorage.app')
+        doc = read_file_from_gcs(best_doc.get('path'), os.environ['BUCKET'])
         if not doc.strip():
             doc = "参考文書なし"
         return llm_prompt(message, doc)
