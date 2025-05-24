@@ -9,7 +9,7 @@ db = firestore.Client()
 
 def respond(message: str, uid: str) -> str:
     task = 'RETRIEVAL_QUERY'
-    model = TextEmbeddingModel.from_pretrained('textembedding-gecko')
+    model = TextEmbeddingModel.from_pretrained('text-multilingual-embedding-002')
 
     inputs = [TextEmbeddingInput(message, task)]
     vector = [embed.values for embed in model.get_embeddings(inputs)]
