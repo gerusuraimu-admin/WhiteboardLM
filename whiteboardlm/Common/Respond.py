@@ -12,7 +12,8 @@ def respond(message: str, uid: str) -> str:
     try:
         response = requests.post(url, json=payload)
         response.raise_for_status()
-        return response.json().get("message", "応答が取得できませんでした。")
+        # return response.json().get("message", "応答が取得できませんでした。")
+        return response.json()
 
     except requests.exceptions.RequestException as e:
-        return f"FastAPI へのリクエストに失敗しました: {e}"
+        return f"RAGへのリクエストに失敗しました: {e}"
