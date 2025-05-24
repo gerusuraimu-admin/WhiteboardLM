@@ -3,7 +3,7 @@ from whiteboardlm.Common import respond
 from whiteboardlm.Discord import DiscordEventObject
 
 
-def discord_start(discord_token: str):
+def discord_start(discord_token: str, uid: str):
     intents = discord.Intents.all()
     client = discord.Client(intents=intents)
 
@@ -19,7 +19,7 @@ def discord_start(discord_token: str):
         obj = DiscordEventObject(message)
 
         if to_bot(obj):
-            result = respond(obj.message)
+            result = respond(obj.message, uid)  # クロージャで uid を利用
             await obj.channel.send(result)
 
     client.run(discord_token)

@@ -58,7 +58,7 @@ def slack_run(data: UIDPayload):
         raise HTTPException(status_code=400)
     slack_token, app_token = get_token(db, data.uid, 'tokens_slack')
 
-    p = Process(target=slack_start, args=(slack_token, app_token))
+    p = Process(target=slack_start, args=(slack_token, app_token, data.uid))
     slack_process[data.uid] = p
     p.start()
 
@@ -95,7 +95,7 @@ def discord_run(data: UIDPayload):
         raise HTTPException(status_code=400)
     discord_token = get_token(db, data.uid, 'tokens_discord')
 
-    p = Process(target=discord_start, args=(discord_token,))
+    p = Process(target=discord_start, args=(discord_token, data.uid))
     discord_process[data.uid] = p
     p.start()
 
